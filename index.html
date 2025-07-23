@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Countdown Timer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: #f4f7fa;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #2c3e50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .countdown {
+      font-size: 2rem;
+      margin-top: 30px;
+      color: #333;
+    }
+
+    .label {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Event Countdown Timer</h1>
+
+  <input type="text" id="eventName" placeholder="Event Name (e.g. Webinar)" />
+  <input type="datetime-local" id="eventDate" />
+  <button onclick="startCountdown()">Start Countdown</button>
+
+  <div class="label" id="eventLabel"></div>
+  <div class="countdown" id="countdownTimer"></div>
+
+  <script>
+    let timer;
+
+    function startCountdown() {
+      const event = document.getElementById("eventName").value;
+      const dateStr = document.getElementById("eventDate").value;
+      const eventDate = new Date(dateStr);
+
+      if (!event || !dateStr || isNaN(eventDate)) {
+        alert("Please enter valid event name and date.");
+        return;
+      }
+
+      document.getElementById("eventLabel").innerText = `Countdown to "${event}"`;
+
+      clearInterval(timer);
+      timer = setInterval(() => {
+        const now = new Date();
+        const diff = eventDate - now;
+
+        if (diff <= 0) {
+          document.getElementById("countdownTimer").innerText = "🎉 It's time!";
+          clearInterval(timer);
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("countdownTimer").innerText =
+          `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+    }
+  </script>
+
+</body>
+</html>
